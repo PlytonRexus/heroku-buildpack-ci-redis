@@ -63,12 +63,13 @@ else
 fi
 
 set-env PATH '/app/.indyno/vendor/redis/bin:$PATH'
-PASSWORD=`openssl rand -hex 16`
+PASSWORD='abcd'
+# `openssl rand -hex 16`
 export REDIS_URL="redis://h:$PASSWORD@localhost:6379/"
 echo "\n\n $REDIS_URL \n\n"
 set-env REDIS_URL "$REDIS_URL"
 echo "export REDIS_URL=$REDIS_URL" >> $BUILDPACK_DIR/export
-echo "echo requirepass abcd | redis-server - &> /dev/null &" >> $PROFILE_PATH
+echo "echo requirepass $PASSWORD | redis-server - &> /dev/null &" >> $PROFILE_PATH
 
 # ensure the redis-server is started during CI runs as the buildpack runner will terminate redis-server between buildpacks and .profile.d is too late
 cat<<EOF > $BUILDPACK_DIR/background
